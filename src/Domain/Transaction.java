@@ -5,15 +5,14 @@ import java.util.Date;
 
 public class Transaction {
 
-  //  id, id_medicament (trebuie să existe), nr. card client (întreg), nr_bucăți, data și ora.
-    private int transactionId;
-    private int transactionDrugId;
+    private String transactionId;
+    private String transactionDrugId;
     private int card;
     private int noOfPiecesPerTransaction;
     private String date;
     private String time;
 
-    public Transaction(int transactionId, int transactionDrugId, int card, int noOfPiecesPerTransaction, String date, String time) {
+    public Transaction(String transactionId, String transactionDrugId, int card, int noOfPiecesPerTransaction, String date, String time) {
         this.transactionId = transactionId;
         this.transactionDrugId = transactionDrugId;
         this.card = card;
@@ -34,19 +33,19 @@ public class Transaction {
                 '}';
     }
 
-    public int getTransactionId() {
+    public String getTransactionId() {
         return transactionId;
     }
 
-    public void setTransactionId(int transactionId) {
+    public void setTransactionId(String transactionId) {
         this.transactionId = transactionId;
     }
 
-    public int getTransactionDrugId() {
+    public String getTransactionDrugId() {
         return transactionDrugId;
     }
 
-    public void setTransactionDrugId(int transactionDrugId) {
+    public void setTransactionDrugId(String transactionDrugId) {
         this.transactionDrugId = transactionDrugId;
     }
 

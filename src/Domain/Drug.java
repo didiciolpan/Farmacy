@@ -2,14 +2,16 @@ package Domain;
 
 public class Drug {
 
-    private int drugId;
+    private String drugId;
+    private String drugName;
     private String producer;
     private double price;
     private int noOfPieces;
     private boolean needsPrescription;
 
-    public Drug(int drugId, String producer, double price, int noOfPieces, boolean needsPrescription) {
+    public Drug(String drugId, String drugName, String producer, double price, int noOfPieces, boolean needsPrescription) {
         this.drugId = drugId;
+        this.drugName = drugName;
         this.producer = producer;
         this.price = price;
         this.noOfPieces = noOfPieces;
@@ -19,7 +21,8 @@ public class Drug {
     @Override
     public String toString() {
         return "Drug{" +
-                "drugId=" + drugId +
+                "drugId='" + drugId + '\'' +
+                ", drugName='" + drugName + '\'' +
                 ", producer='" + producer + '\'' +
                 ", price=" + price +
                 ", noOfPieces=" + noOfPieces +
@@ -27,12 +30,20 @@ public class Drug {
                 '}';
     }
 
-    public int getDrugId() {
+    public String getDrugId() {
         return drugId;
     }
 
-    public void setDrugId(int drugId) {
+    public void setDrugId(String drugId) {
         this.drugId = drugId;
+    }
+
+    public String getDrugName() {
+        return drugName;
+    }
+
+    public void setDrugName(String drugName) {
+        this.drugName = drugName;
     }
 
     public String getProducer() {
