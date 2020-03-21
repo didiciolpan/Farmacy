@@ -44,7 +44,7 @@ public class TransactionService {
         }
 
         Transaction transaction = new Transaction(transactionId, transactionDrugId, card, noOfPiecesPerTransaction, date, time);
-        transactionRepository.upsert(transaction);
+        transactionRepository.update(transaction);
         return transaction;
     }
 

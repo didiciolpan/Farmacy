@@ -1,8 +1,5 @@
 package Domain;
 
-import java.sql.Timestamp;
-import java.util.Date;
-
 public class Transaction {
 
     private String transactionId;

@@ -21,7 +21,11 @@ public class DrugRepository {
         return storage.get(drugId);
     }
 
-    public void upsert(Drug drug) {
+    public Drug findByName(String drugName){
+        return storage.get(drugName);
+    }
+
+    public void update(Drug drug) {
         validator.validate(drug);
         storage.put(drug.getDrugId(), drug);
     }

@@ -31,15 +31,18 @@ public class DrugService {
             }
         }
         Drug drug = new Drug(drugId, drugName, producer, price, noOFPieces, needsPrescription);
-        drugRepository.upsert(drug);
+        drugRepository.update(drug);
     }
 
     public void remove(String drugId) {
         drugRepository.remove(drugId);
     }
 
+    public Drug search (String drugName){
+        return drugRepository.findByName(drugName);
+    }
+
     public List<Drug> getAll() {
         return drugRepository.getAll();
     }
-
 }

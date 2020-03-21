@@ -52,7 +52,8 @@ public class Console {
             System.out.println("1. Add or update a drug");
             System.out.println("2. Remove a drug");
             System.out.println("3. View all drugs");
-            System.out.println("4. Back");
+            System.out.println("4. Search a drug after drug name" );
+            System.out.println("5. Back");
 
             String option = scanner.nextLine();
             switch (option) {
@@ -66,6 +67,9 @@ public class Console {
                     handleViewDrugs();
                     break;
                 case "4":
+                    handleSearchDrug();
+                    break;
+                case "5":
                     return;
                 default:
                     System.out.println("Invalid option!");
@@ -79,7 +83,8 @@ public class Console {
             System.out.println("1. Add or update a transaction");
             System.out.println("2. Remove a transaction");
             System.out.println("3. View all transactions");
-            System.out.println("4. Back");
+            System.out.println("4. Search a transaction after transaction id" );
+            System.out.println("5. Back");
 
             String option = scanner.nextLine();
             switch (option) {
@@ -93,6 +98,9 @@ public class Console {
                     handleViewTransactions();
                     break;
                 case "4":
+                    handleSearchTransaction();
+                    break;
+                case "5":
                     return;
                 default:
                     System.out.println("Invalid option!");
@@ -107,6 +115,21 @@ public class Console {
         }
     }
 
+    private void handleSearchDrug(){
+        try {
+            System.out.println("Enter the drug name you are looking for: ");
+            String drugNameToBeSearched = scanner.nextLine();
+
+            Drug searchedDrug = drugService.search(drugNameToBeSearched);
+            System.out.println("To be implemented");// ("Search result = " + searchedDrug);
+
+
+        }catch (Exception ex){
+            ex.printStackTrace();
+            System.out.println("The drug you are looking for does not exist! "+ex.getMessage());
+        }
+    }
+
     private void handleRemoveDrug() {
         try {
             System.out.print("Enter the drugId to remove:");
@@ -115,6 +138,7 @@ public class Console {
 
             System.out.println("Drug removed!");
         } catch (Exception ex) {
+            ex.printStackTrace();
             System.out.println("Errors:\n" + ex.getMessage());
         }
     }
@@ -147,6 +171,10 @@ public class Console {
         for (Transaction transaction : transactionService.getAll()) {
             System.out.println(transaction);
         }
+    }
+
+    private void handleSearchTransaction(){
+
     }
 
     private void handleRemoveTransaction() {

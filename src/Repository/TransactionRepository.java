@@ -21,7 +21,7 @@ public class TransactionRepository {
         return storage.get(transactionId);
     }
 
-    public void upsert(Transaction transaction) {
+    public void update(Transaction transaction) {
         validator.validate(transaction);
         storage.put(transaction.getTransactionId(), transaction);
     }
