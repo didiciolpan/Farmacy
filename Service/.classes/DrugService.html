@@ -1,0 +1,191 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: DrugService</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">Service</a> ]
+</div>
+
+<h1>Coverage Summary for Class: DrugService (Service)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">DrugService</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (10/ 10)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (53/ 53)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package Service;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import Domain.*;
+<i>4</i>&nbsp;import Repository.IRepositiory;
+<i>5</i>&nbsp;
+<i>6</i>&nbsp;import java.security.KeyException;
+<i>7</i>&nbsp;import java.util.ArrayList;
+<i>8</i>&nbsp;import java.util.List;
+<i>9</i>&nbsp;
+<i>10</i>&nbsp;public class DrugService {
+<i>11</i>&nbsp;
+<i>12</i>&nbsp;    private IRepositiory&lt;Drug&gt; drugIRepository;
+<i>13</i>&nbsp;    private DrugValidator drugValidator;
+<i>14</i>&nbsp;    private UndoRedoService undoRedoService;
+<i>15</i>&nbsp;
+<i>16</i>&nbsp;    public DrugService(IRepositiory&lt;Drug&gt; drugIRepositiory, DrugValidator drugValidator,
+<b class="fc"><i>17</i>&nbsp;                       UndoRedoService undoRedoService) {</b>
+<b class="fc"><i>18</i>&nbsp;        this.drugIRepository = drugIRepositiory;</b>
+<b class="fc"><i>19</i>&nbsp;        this.drugValidator = drugValidator;</b>
+<b class="fc"><i>20</i>&nbsp;        this.undoRedoService = undoRedoService;</b>
+<i>21</i>&nbsp;
+<b class="fc"><i>22</i>&nbsp;    }</b>
+<i>23</i>&nbsp;
+<i>24</i>&nbsp;    public void add(String drugName, String producer, double price, int noOfPieces, boolean needsPrescription) throws KeyException {
+<b class="fc"><i>25</i>&nbsp;        Drug drug = new Drug(drugName, producer, price, noOfPieces, needsPrescription);</b>
+<b class="fc"><i>26</i>&nbsp;        drugValidator.validatePrice(drug.getPrice());</b>
+<b class="fc"><i>27</i>&nbsp;        this.drugIRepository.create(drug);</b>
+<b class="fc"><i>28</i>&nbsp;        this.undoRedoService.addToUndo(new AddOperation&lt;Drug&gt;(drugIRepository, drug));</b>
+<b class="fc"><i>29</i>&nbsp;    }</b>
+<i>30</i>&nbsp;
+<i>31</i>&nbsp;    public void update(int id, String drugName, String producer, double price, int noOfPieces, boolean needsPrescription) throws KeyException {
+<b class="fc"><i>32</i>&nbsp;        Drug existing = drugIRepository.findById(id);</b>
+<i>33</i>&nbsp;        // Drug backuop = existing;
+<i>34</i>&nbsp;
+<b class="fc"><i>35</i>&nbsp;        Drug backup = new Drug(existing.getDrugName(), existing.getProducer(), existing.getPrice(),</b>
+<b class="fc"><i>36</i>&nbsp;                existing.getNoOfPieces(), existing.isNeedsPrescription());</b>
+<b class="fc"><i>37</i>&nbsp;        backup.setId(id);</b>
+<i>38</i>&nbsp;
+<b class="fc"><i>39</i>&nbsp;        if (!drugName.isEmpty()) {</b>
+<b class="fc"><i>40</i>&nbsp;            existing.setDrugName(drugName);</b>
+<i>41</i>&nbsp;        }
+<b class="fc"><i>42</i>&nbsp;        if (!producer.isEmpty()) {</b>
+<b class="fc"><i>43</i>&nbsp;            existing.setProducer(producer);</b>
+<i>44</i>&nbsp;        }
+<b class="fc"><i>45</i>&nbsp;        if (price != 0) {</b>
+<b class="fc"><i>46</i>&nbsp;            existing.setPrice(price);</b>
+<i>47</i>&nbsp;        }
+<b class="fc"><i>48</i>&nbsp;        if ((noOfPieces != 0)) {</b>
+<b class="fc"><i>49</i>&nbsp;            existing.setNoOfPieces(noOfPieces);</b>
+<i>50</i>&nbsp;        }
+<b class="fc"><i>51</i>&nbsp;        drugIRepository.update(existing);</b>
+<b class="fc"><i>52</i>&nbsp;        this.undoRedoService.addToUndo(new UpdateOperation&lt;&gt;(drugIRepository, backup, existing));</b>
+<i>53</i>&nbsp;
+<b class="fc"><i>54</i>&nbsp;    }</b>
+<i>55</i>&nbsp;
+<i>56</i>&nbsp;    @SuppressWarnings(&quot;unchecked&quot;)
+<i>57</i>&nbsp;    public void remove(int drugId) throws KeyException {
+<b class="fc"><i>58</i>&nbsp;        Drug drugToBeRemoved = drugIRepository.findById(drugId);</b>
+<b class="fc"><i>59</i>&nbsp;        drugIRepository.remove(drugId);</b>
+<b class="fc"><i>60</i>&nbsp;        this.undoRedoService.addToUndo(new DeleteOperation&lt;Drug&gt;(drugIRepository, drugToBeRemoved));</b>
+<i>61</i>&nbsp;        //todo: test pe exceptie daca nu exista cand vreau sa sterg un Drug - done
+<i>62</i>&nbsp;        //todo: test ca se sterge cu succes - done
+<i>63</i>&nbsp;        //todo: cand sterg un medicament sa se stearga si tranzactiile acestuia si la undo sa
+<i>64</i>&nbsp;        //todo: vina inapoi si tranzactiile -&gt;  metoda removeDrugAndTransaction in Transaction service
+<b class="fc"><i>65</i>&nbsp;    }</b>
+<i>66</i>&nbsp;
+<i>67</i>&nbsp;    public void removeForever(int drugId) throws  KeyException{
+<b class="fc"><i>68</i>&nbsp;        Drug drugToBeRemoved = drugIRepository.findById(drugId);</b>
+<b class="fc"><i>69</i>&nbsp;        drugIRepository.remove(drugId);</b>
+<b class="fc"><i>70</i>&nbsp;    }</b>
+<i>71</i>&nbsp;
+<i>72</i>&nbsp;    public Drug searchById(int drugId) {
+<b class="fc"><i>73</i>&nbsp;        return drugIRepository.findById(drugId);</b>
+<i>74</i>&nbsp;    }
+<i>75</i>&nbsp;
+<i>76</i>&nbsp;    public List&lt;Drug&gt; getAll() {
+<b class="fc"><i>77</i>&nbsp;        return drugIRepository.getAll();</b>
+<i>78</i>&nbsp;    }
+<i>79</i>&nbsp;
+<i>80</i>&nbsp;    public void validatePrice(double price) {
+<b class="fc"><i>81</i>&nbsp;        drugValidator.validatePrice(price);</b>
+<b class="fc"><i>82</i>&nbsp;    }</b>
+<i>83</i>&nbsp;
+<i>84</i>&nbsp;    public List&lt;Drug&gt; searchDrugKey(String search) {
+<b class="fc"><i>85</i>&nbsp;        List&lt;Drug&gt; drugsFound = new ArrayList&lt;Drug&gt;();   // lista goala unde stochez rezultatele</b>
+<b class="fc"><i>86</i>&nbsp;        List&lt;Drug&gt; drugs = getAll();</b>
+<b class="fc"><i>87</i>&nbsp;        for (Drug drug : drugs) {</b>
+<b class="fc"><i>88</i>&nbsp;            if (drug.getDrugName().equalsIgnoreCase(search) || drug.getProducer().equalsIgnoreCase(search)) {</b>
+<b class="fc"><i>89</i>&nbsp;                drugsFound.add(drug);</b>
+<i>90</i>&nbsp;            }
+<b class="fc"><i>91</i>&nbsp;        }</b>
+<b class="fc"><i>92</i>&nbsp;        return drugsFound;</b>
+<i>93</i>&nbsp;    }
+<i>94</i>&nbsp;
+<i>95</i>&nbsp;    public List&lt;Drug&gt; increasePriceOfDrugsByPercent(double percent, double value) {
+<b class="fc"><i>96</i>&nbsp;        List&lt;Drug&gt; drugs = getAll();</b>
+<b class="fc"><i>97</i>&nbsp;        List&lt;Drug&gt; expensedDrugs = new ArrayList&lt;Drug&gt;();</b>
+<b class="fc"><i>98</i>&nbsp;        for (Drug drug : drugs) {</b>
+<b class="fc"><i>99</i>&nbsp;            if (drug.getPrice() &lt; value) {</b>
+<b class="fc"><i>100</i>&nbsp;                double actualPrice = drug.getPrice();</b>
+<b class="fc"><i>101</i>&nbsp;                double increasedPrice = actualPrice * (percent / 100);</b>
+<b class="fc"><i>102</i>&nbsp;                drug.setPrice(increasedPrice);</b>
+<b class="fc"><i>103</i>&nbsp;                expensedDrugs.add(drug);</b>
+<i>104</i>&nbsp;            }
+<b class="fc"><i>105</i>&nbsp;        }</b>
+<b class="fc"><i>106</i>&nbsp;        return expensedDrugs;</b>
+<i>107</i>&nbsp;    }
+<i>108</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-04-05 00:14</div>
+</div>
+</body>
+</html>
